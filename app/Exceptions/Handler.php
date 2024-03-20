@@ -2,12 +2,16 @@
 
 namespace App\Exceptions;
 
+use App\Utilities\ApiResponseTrait;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Throwable;
 
 class Handler extends ExceptionHandler
 {
+    use ApiResponseTrait;
+
     /**
      * The list of the inputs that are never flashed to the session on validation exceptions.
      *
@@ -33,9 +37,17 @@ class Handler extends ExceptionHandler
     {
         if ($e instanceof ValidationException) {
             // 自定義驗證失敗時的響應
-            return response()->json([
-                'errors' => $e->errors(),
-            ], 422);
+
+            $errors = [];
+            foreach ($e->errors() as $key => $value) {
+                $errors[] = [
+                    "name" => $key,
+                    "message" => $value
+                ];
+            }
+
+            return $this->errorResponse($errors, "格式錯誤", ResponseAlias::HTTP_UNPROCESSABLE_ENTITY);
+
         }
 
         return parent::render($request, $e);
