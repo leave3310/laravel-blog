@@ -3,6 +3,7 @@
 use App\Http\Controllers\ArticleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,12 +20,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/article', [ArticleController::class, 'getArticles']);
+Route::get('/articles', [ArticleController::class, 'getArticles']);
 
-Route::get('/article/{id}', [ArticleController::class, 'getArticle']);
+Route::get('/articles/{id}', [ArticleController::class, 'getArticle']);
 
-Route::post('/article', [ArticleController::class, 'postArticle']);
+Route::post('/articles', [ArticleController::class, 'postArticle']);
 
-Route::put('/article', [ArticleController::class, 'putArticle']);
+Route::put('/articles', [ArticleController::class, 'putArticle']);
 
-Route::delete('/article', [ArticleController::class, 'deleteArticle']);
+Route::delete('/articles', [ArticleController::class, 'deleteArticle']);
+
+Route::post('/images', [FileController::class, 'postFile']);
+
